@@ -9,6 +9,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "Aura/Aura.h"
 #include "Components/AudioComponent.h"
 
@@ -61,6 +62,12 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlapComponent, AAc
 	{
 		return;
 	}
+	//Validation for friendly fire
+	if (!UAuraAbilitySystemLibrary::IsNotFriend(DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser(), OtherActor))
+	{
+		return;
+	}
+	
 	// fix for multiple sounds spawn on the client
 	if (!bHit)
 	{
