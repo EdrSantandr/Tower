@@ -8,6 +8,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Aura/Aura.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 AAuraCharacterBase::AAuraCharacterBase()
 {
@@ -44,6 +45,12 @@ void AAuraCharacterBase::Die()
 
 void AAuraCharacterBase::MulticastHandelDeath_Implementation()
 {
+	//Play sound of death Character
+	if (DeathSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DeathSound,GetActorLocation(), GetActorRotation());
+	}
+	
 	//This function is for server and client
 	Weapon->SetSimulatePhysics(true);
 	Weapon->SetEnableGravity(true);
