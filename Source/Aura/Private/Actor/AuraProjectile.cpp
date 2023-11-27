@@ -52,6 +52,7 @@ void AAuraProjectile::Destroyed()
 		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect,GetActorLocation());
 		if (LoopingSoundComponent)	LoopingSoundComponent->Stop();
+		bHit = true;
 	}
 	Super::Destroyed();
 }
@@ -76,7 +77,10 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlapComponent, AAc
 
 		// Spawn niagara
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect,GetActorLocation());
-		if (LoopingSoundComponent) LoopingSoundComponent->Stop();	
+		if (LoopingSoundComponent) LoopingSoundComponent->Stop();
+
+		//Prevent double spawn
+		bHit = true;
 	}
 	
 	//Check if its on the server
