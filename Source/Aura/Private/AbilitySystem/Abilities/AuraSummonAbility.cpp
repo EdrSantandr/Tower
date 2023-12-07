@@ -3,6 +3,12 @@
 
 #include "AbilitySystem/Abilities/AuraSummonAbility.h"
 
+TSubclassOf<APawn> UAuraSummonAbility::GetRandomMinionClass()
+{
+	const int32 Selection = FMath::RandRange(0, MinionClasses.Num()-1);
+	return MinionClasses[Selection];
+}
+
 TArray<FVector> UAuraSummonAbility::GetSpawnLocations()
 {
 	const FVector Forward = GetAvatarActorFromActorInfo()->GetActorForwardVector();
@@ -23,7 +29,6 @@ TArray<FVector> UAuraSummonAbility::GetSpawnLocations()
 			ChosenSpawnLocation = Hit.ImpactPoint;
 		}
 		SpawnLocations.Add(ChosenSpawnLocation);
-		
 	}
 	return SpawnLocations;
 }
