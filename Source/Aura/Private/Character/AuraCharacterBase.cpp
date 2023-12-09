@@ -121,6 +121,11 @@ int32 AAuraCharacterBase::GetMinionCount_Implementation()
 	return MinionCount;
 }
 
+void AAuraCharacterBase::IncrementMinionCount_Implementation(int32 Amount)
+{
+	MinionCount += Amount;
+}
+
 bool AAuraCharacterBase::IsDead_Implementation() const
 {
 	return bDead;
