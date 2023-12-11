@@ -64,6 +64,9 @@ public:
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
 
+	//For abilities for the HUD
+	FGameplayTag Abilities_Fire_Firebolt;
+
 	//For sockets and montages
 	FGameplayTag CombatSocket_Weapon;
 	FGameplayTag CombatSocket_RightHand;
