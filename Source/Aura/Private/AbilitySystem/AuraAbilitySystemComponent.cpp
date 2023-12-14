@@ -22,6 +22,9 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(TArray<TSubclassOf<UGame
 			//GiveAbilityAndActivateOnce(AbilitySpec);
 		}
 	}
+	//After the loop we should broadcast the abilities to the WidgetController
+	bStartupAbilitiesGiven = true;
+	AbilitiesGivenDelegate.Broadcast(this);
 }
 
 void UAuraAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
