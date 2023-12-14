@@ -67,6 +67,9 @@ public:
 	//For abilities for the HUD
 	FGameplayTag Abilities_Fire_Firebolt;
 
+	//For cooldowns
+	FGameplayTag Cooldown_Fire_Firebolt;
+
 	//For sockets and montages
 	FGameplayTag CombatSocket_Weapon;
 	FGameplayTag CombatSocket_RightHand;
