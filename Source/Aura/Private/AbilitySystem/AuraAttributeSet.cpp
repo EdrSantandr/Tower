@@ -114,6 +114,26 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties Props, float Da
 	}
 }
 
+void UAuraAttributeSet::SendXPEvent(const FEffectProperties Props)
+{
+	//Here we need How much XP to reward. To achieve this we need the level and the class
+	if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetCharacter))
+	{
+		const int32 TargetLevel = CombatInterface->GetPlayerLevel();
+		const ECharacterClass TargetClass = ICombatInterface::Execute_GetCharacterClass(Props.TargetCharacter);
+		//This comes from the Target
+		const int32 XPReward = UAuraAbilitySystemLibrary::GetXPRewardForClassAndLevel(Props.TargetCharacter, TargetClass, TargetLevel);
+		//Here also we need the tag for the event
+		const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+		//We need a payload to send the magnitude
+		FGameplayEventData Payload;
+		Payload.EventTag = GameplayTags.Attributes_Meta_IncomingXP;
+		Payload.EventMagnitude = XPReward;
+		//This need to be sent to the source
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Props.SourceCharacter, GameplayTags.Attributes_Meta_IncomingXP,Payload);
+	}
+}
+
 // This function is the right one to handle attribute changes of any type
 void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
@@ -159,6 +179,8 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				{
 					CombatInterface->Die();
 				}
+				//Send the event to reward XP
+				SendXPEvent(Props);
 			}
 			else
 			{
@@ -179,8 +201,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	{
 		const float LocalIncomingXP = GetIncomingXP();
 		SetIncomingXP(0.f);
-		
-		UE_LOG(LogAura, Log, TEXT("Incoming XP: %f"), LocalIncomingXP);
+		//UE_LOG(LogAura, Log, TEXT("Incoming XP: %f"), LocalIncomingXP);
 	}
 }
 
