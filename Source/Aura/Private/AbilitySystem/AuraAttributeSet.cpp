@@ -118,9 +118,9 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties Props, float Da
 void UAuraAttributeSet::SendXPEvent(const FEffectProperties Props)
 {
 	//Here we need How much XP to reward. To achieve this we need the level and the class
-	if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetCharacter))
+	if (Props.TargetCharacter->Implements<UCombatInterface>())
 	{
-		const int32 TargetLevel = CombatInterface->GetPlayerLevel();
+		const int32 TargetLevel = ICombatInterface::Execute_GetPlayerLevel(Props.TargetCharacter);
 		const ECharacterClass TargetClass = ICombatInterface::Execute_GetCharacterClass(Props.TargetCharacter);
 		//This comes from the Target
 		const int32 XPReward = UAuraAbilitySystemLibrary::GetXPRewardForClassAndLevel(Props.TargetCharacter, TargetClass, TargetLevel);
@@ -205,6 +205,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		//UE_LOG(LogAura, Log, TEXT("Incoming XP: %f"), LocalIncomingXP);
 		//Here we need the player state receive the event
 		//TODO: see if we should levelup
+		
 		if (Props.SourceCharacter->Implements<UPlayerInterface>())
 		{
 			IPlayerInterface::Execute_AddToXp(Props.SourceCharacter,LocalIncomingXP);			
