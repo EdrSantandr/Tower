@@ -11,6 +11,9 @@ class UAuraAttributeSet;
 class UAttributeSet;
 class UAbilitySystemComponent;
 
+//Delegate to broadcast int values
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChangedSignature, int32, NewValue);
+
 // This struct is needed to handle the 4 params that this class needs
 USTRUCT(BlueprintType)
 struct FWidgetControllerParams
