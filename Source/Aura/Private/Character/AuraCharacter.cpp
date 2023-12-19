@@ -149,14 +149,14 @@ void AAuraCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	check(AuraPlayerState);
-	//TODO: Add to attribute points to player state
+	AuraPlayerState->AddtoAttributePoints(InAttributePoints);
 }
 
 void AAuraCharacter::AddToSpellPoints_Implementation(int32 InSpellPoints)
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	check(AuraPlayerState);
-	//TODO: Add to spell points to player state
+	AuraPlayerState->AddtoSpellPoints(InSpellPoints);
 }
 
 int32 AAuraCharacter::GetPlayerLevel_Implementation()
