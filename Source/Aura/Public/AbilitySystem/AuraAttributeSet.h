@@ -72,6 +72,8 @@ public:
 
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
+	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
+
 	//In this structure we'll handle different delegates associate to each gameplaytag
 	TMap<FGameplayTag, TStaticFuncPointer<FGameplayAttribute()>> TagsToAttributes;
 	//TMap<FGameplayTag, FGameplayAttribute(*)()> TagsToAttributes;
@@ -241,4 +243,8 @@ private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 	void ShowFloatingText(const FEffectProperties Props, float Damage, bool bBlockedHit, bool bCriticalHit) const;
 	void SendXPEvent(const FEffectProperties Props);
+
+	bool bTopOffHealth = false;
+	bool bTopOffMana = false;
+	
 };
