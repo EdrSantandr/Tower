@@ -11,9 +11,8 @@
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {
-	UAuraAttributeSet* AS = CastChecked<UAuraAttributeSet>(AttributeSet);
 	check(AttributeInfo);
-	for(auto &Pair: AS->TagsToAttributes)
+	for(auto &Pair: GetAuraAS()->TagsToAttributes)
 	{
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
 			[this, Pair](const FOnAttributeChangeData& Data)
@@ -24,8 +23,8 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 	}
 
 	//We need the player state to manage attribute and spell points
-	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
-	AuraPlayerState->OnAttributePointsChangedDelegate.AddLambda(
+	
+	GetAuraPS()->OnAttributePointsChangedDelegate.AddLambda(
 		[this](int32 Points)
 	{
 		AttributePointsChangedSignature.Broadcast(Points);
@@ -34,20 +33,17 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()
 {
-	UAuraAttributeSet* AS = CastChecked<UAuraAttributeSet>(AttributeSet);
 	check(AttributeInfo);
-	for(auto& Pair:AS->TagsToAttributes)
+	for(auto& Pair:GetAuraAS()->TagsToAttributes)
 	{
 		BroadcastAttributeInfo(Pair.Key,Pair.Value());
 	}
-	const AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
-	AttributePointsChangedSignature.Broadcast(AuraPlayerState->GetPlayerAttributePoints());
+	AttributePointsChangedSignature.Broadcast(GetAuraPS()->GetPlayerAttributePoints());
 }
 
 void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)
 {
-	UAuraAbilitySystemComponent* AuraAbilitySystemComponent = CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
-	AuraAbilitySystemComponent->UpgradeAttribute(AttributeTag);
+	GetAuraASC()->UpgradeAttribute(AttributeTag);
 }
 
 void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& AttributeTag, const FGameplayAttribute& Attribute) const
