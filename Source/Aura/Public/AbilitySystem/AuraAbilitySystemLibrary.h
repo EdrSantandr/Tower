@@ -8,6 +8,9 @@
 #include "AuraAbilitySystemLibrary.generated.h"
 
 
+class AAuraHUD;
+struct FWidgetControllerParams;
+class USpellMenuWidgetController;
 struct FGameplayEffectContextHandle;
 class UAbilitySystemComponent;
 class UAttributeMenuWidgetController;
@@ -22,12 +25,18 @@ class AURA_API UAuraAbilitySystemLibrary : public UBlueprintFunctionLibrary
 
 public:
 	//Here we always do static functions
-	UFUNCTION(BlueprintPure, Category = "AuraAblitySystemLibrary|WidgetController")
+	UFUNCTION(BlueprintPure, Category = "AuraAblitySystemLibrary|WidgetController", meta = (DefaultToSelf="WorldContextObject"))
+	static bool MakeWidgetControllerParams(const UObject* WorldContextObject, FWidgetControllerParams& OutWCParams, AAuraHUD*& OutAuraHUD);
+	
+	UFUNCTION(BlueprintPure, Category = "AuraAblitySystemLibrary|WidgetController", meta = (DefaultToSelf="WorldContextObject"))
 	static UOverlayWidgetController* GetOverlayWidgetController(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintPure, Category = "AuraAblitySystemLibrary|WidgetController")
+	UFUNCTION(BlueprintPure, Category = "AuraAblitySystemLibrary|WidgetController", meta = (DefaultToSelf="WorldContextObject"))
 	static UAttributeMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
 
+	UFUNCTION(BlueprintPure, Category = "AuraAblitySystemLibrary|WidgetController", meta = (DefaultToSelf="WorldContextObject"))
+	static USpellMenuWidgetController* GetSpellMenuWidgetController(const UObject* WorldContextObject);
+	
 	UFUNCTION(BlueprintCallable, Category = "AuraAblitySystemLibrary|CharacterClassDefaults")
 	static void InitializeDefaultAttributes(const UObject* WorldContextObject, ECharacterClass CharacterClass, float Level, UAbilitySystemComponent* ASC);
 
