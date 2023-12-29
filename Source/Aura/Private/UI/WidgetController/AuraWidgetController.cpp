@@ -3,6 +3,7 @@
 
 #include "UI/WidgetController/AuraWidgetController.h"
 
+#include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
@@ -27,14 +28,13 @@ void UAuraWidgetController::BindCallbacksToDependencies()
 
 void UAuraWidgetController::BroadcastAbilityInfo()
 {
-	
 	if (!GetAuraASC()->bStartupAbilitiesGiven) return;
-
 	FForEachAbility BroadcastDelegate;
 	BroadcastDelegate.BindLambda([this](const FGameplayAbilitySpec& AbilitySpec)
 	{
 		FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AuraAbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
 		Info.InputTag = AuraAbilitySystemComponent->GetInputTagFromSpec(AbilitySpec);
+		Info.StatusTag = AuraAbilitySystemComponent->GetStatusFromSpec(AbilitySpec);
 		AbilityInfoSignature.Broadcast(Info);
 	});
 	GetAuraASC()->ForEachAbility(BroadcastDelegate);
