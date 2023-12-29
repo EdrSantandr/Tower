@@ -61,7 +61,7 @@ public:
 	//For MetaAttributes
 	FGameplayTag Damage;
 	FGameplayTag Damage_Fire;
-	FGameplayTag Damage_Lighting;
+	FGameplayTag Damage_Lightning;
 	FGameplayTag Damage_Arcane;
 	FGameplayTag Damage_Physical;
 
@@ -82,6 +82,7 @@ public:
 
 	//For abilities for the HUD
 	FGameplayTag Abilities_Fire_Firebolt;
+	FGameplayTag Abilities_Lightning_Electrocute;
 
 	//For cooldowns
 	FGameplayTag Cooldown_Fire_Firebolt;
