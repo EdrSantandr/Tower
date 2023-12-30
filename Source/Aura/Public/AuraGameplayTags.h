@@ -69,6 +69,7 @@ public:
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
 	FGameplayTag Abilities_HitReact;
+	FGameplayTag Abilities_None;
 
 	//For Abilities status of the ability
 	FGameplayTag Abilities_Status_Locked;
