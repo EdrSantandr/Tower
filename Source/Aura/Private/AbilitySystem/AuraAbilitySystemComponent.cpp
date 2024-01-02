@@ -169,9 +169,42 @@ void UAuraAbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
 			GiveAbility(AbilitySpec);
 			//We can force it to replicate now
 			MarkAbilitySpecDirty(AbilitySpec);
-			ClientUpdateAbilityStatus(Info.AbilityTag, FAuraGameplayTags::Get().Abilities_Status_Eligible);
+			ClientUpdateAbilityStatus(Info.AbilityTag, FAuraGameplayTags::Get().Abilities_Status_Eligible,1);
 		}
 	}
+}
+
+void UAuraAbilitySystemComponent::ServerSpendSpellPoint_Implementation(const FGameplayTag& AbilityTag)
+{
+	if (FGameplayAbilitySpec* AbilitySpec = GetSpecFromAbilityTag(AbilityTag))
+	{
+		//Spend spellpoints
+		if (GetAvatarActor()->Implements<UPlayerInterface>())
+		{
+			IPlayerInterface::Execute_AddToSpellPoints(GetAvatarActor(), -1);
+		}
+
+		//Check if it's gonna upgrade the ability or unlock a new one
+		const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get(); 
+		FGameplayTag Status = GetStatusFromSpec(*AbilitySpec);
+
+		if(Status.MatchesTagExact(GameplayTags.Abilities_Status_Eligible))
+		{
+			//In this case we setup the new ability to unlocked
+			AbilitySpec->DynamicAbilityTags.RemoveTag(GameplayTags.Abilities_Status_Eligible);
+			AbilitySpec->DynamicAbilityTags.AddTag(GameplayTags.Abilities_Status_Unlocked);
+			Status = GameplayTags.Abilities_Status_Unlocked;
+		}
+		else if (Status.MatchesTagExact(GameplayTags.Abilities_Status_Equipped) || Status.MatchesTagExact(GameplayTags.Abilities_Status_Unlocked))
+		{
+			//In this case we level up the ability
+			AbilitySpec->Level += 1;
+		}
+		//update the ability on the menu broadcast
+		ClientUpdateAbilityStatus(AbilityTag, Status, AbilitySpec->Level);
+		MarkAbilitySpecDirty(*AbilitySpec);
+	}
+
 }
 
 void UAuraAbilitySystemComponent::ServerUpgradeAttribute_Implementation(const FGameplayTag& AttributeTag)
@@ -199,9 +232,9 @@ void UAuraAbilitySystemComponent::OnRep_ActivateAbilities()
 	}
 }
 
-void UAuraAbilitySystemComponent::ClientUpdateAbilityStatus_Implementation(const FGameplayTag& AbilityTag,const FGameplayTag& StatusTag)
+void UAuraAbilitySystemComponent::ClientUpdateAbilityStatus_Implementation(const FGameplayTag& AbilityTag,const FGameplayTag& StatusTag, int32 AbilityLevel)
 {
-	AbilityStatusChangedDelegate.Broadcast(AbilityTag, StatusTag);
+	AbilityStatusChangedDelegate.Broadcast(AbilityTag, StatusTag, AbilityLevel);
 }
 
 void UAuraAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
