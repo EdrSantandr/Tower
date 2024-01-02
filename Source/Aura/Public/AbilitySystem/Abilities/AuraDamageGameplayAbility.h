@@ -20,7 +20,7 @@ public:
 	void CauseDamage(AActor* TargetActor);
 	
 protected:
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
