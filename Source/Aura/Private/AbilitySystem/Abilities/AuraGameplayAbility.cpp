@@ -38,7 +38,12 @@ float UAuraGameplayAbility::GetManaCost(float InLevel) const
 	return ManaCost;
 }
 
-float UAuraGameplayAbility::GetCooldown(float InLevel)
+float UAuraGameplayAbility::GetCooldown(float InLevel) const
 {
-	return 0.f;
+	float Cooldown = 0.f;
+	if (const UGameplayEffect* CooldownEffect = GetCooldownGameplayEffect())
+	{
+		CooldownEffect->DurationMagnitude.GetStaticMagnitudeIfPossible(InLevel,Cooldown);
+	}
+	return Cooldown;
 }
