@@ -38,6 +38,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SpendPointButtonPress();
+
+	UFUNCTION(BlueprintCallable)
+	void GlobeDeselect();
 	
 private:
 
