@@ -12,7 +12,8 @@ DECLARE_MULTICAST_DELEGATE(FAbilitiesGiven);
 DECLARE_DELEGATE_OneParam(FForEachAbility, const FGameplayAbilitySpec&);
 //Make a delegate to send the ability tag and the status
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FAbilityStatusChanged, const FGameplayTag& /*AbilityTag*/, const FGameplayTag& /*StatusAbilityTag*/, int32 /*AbilityLevel*/ );
-
+//Make a delegate to send te info required to update the globes after an ability equipment
+DECLARE_MULTICAST_DELEGATE_FourParams(FAbilityEquipped, const FGameplayTag& /*AbilityTag*/,const FGameplayTag& /*StatusTag*/,const FGameplayTag& /*SlotTag*/, const FGameplayTag& /*PrevSlotTag*/);
 /**
  * 
  */
@@ -29,6 +30,8 @@ public:
 	FAbilitiesGiven AbilitiesGivenDelegate;
 
 	FAbilityStatusChanged AbilityStatusChangedDelegate;
+
+	FAbilityEquipped AbilityEquippedDelegate;
 
 	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>> &StartupAbilities);
 
@@ -48,6 +51,10 @@ public:
 
 	static FGameplayTag GetStatusFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 
+	FGameplayTag GetStatusFromAbilityTag(const FGameplayTag& AbilityTag);
+
+	FGameplayTag GetInputTagFromAbilityTag(const FGameplayTag& AbilityTag);
+
 	FGameplayAbilitySpec* GetSpecFromAbilityTag(const FGameplayTag& AbilityTag);
 	
 	void UpgradeAttribute(const FGameplayTag& AttributeTag);
@@ -60,7 +67,18 @@ public:
 	UFUNCTION(Server, Reliable)
 	void ServerSpendSpellPoint(const FGameplayTag& AbilityTag);
 
+	UFUNCTION(Server, Reliable)
+	void ServerEquipAbility(const FGameplayTag& AbilityTag, const FGameplayTag& SlotTag);
+
+	void ClientEquipAbility(const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, const FGameplayTag& SlotTag, const FGameplayTag& PrevSlotTag);
+
 	bool GetDescriptionByAbilityTag(const FGameplayTag& AbilityTag, FString& OutDescription, FString& OutNextLevelDescription);
+
+	void ClearSlot(FGameplayAbilitySpec* Spec);
+
+	void ClearAbilitiesOfSlot(const FGameplayTag& SlotTag);
+
+	static bool AbilityHasSlot(FGameplayAbilitySpec* Spec, const FGameplayTag& SlotTag);
 
 protected:
 
