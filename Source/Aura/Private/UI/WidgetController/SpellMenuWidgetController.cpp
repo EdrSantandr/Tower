@@ -168,6 +168,9 @@ void USpellMenuWidgetController::OnAbilityEquipped(const FGameplayTag& AbilityTa
 
 	//We also need to stop the animations
 	StopWaitingForEquipSignature.Broadcast(AbilityInfo->FindAbilityInfoForTag(AbilityTag).AbilityType);
+	
+	SpellGlobeReassignedSignature.Broadcast(AbilityTag);
+	GlobeDeselect();
 }
 
 void USpellMenuWidgetController::ShouldEnableButtons(const FGameplayTag& AbilityStatus, int32 SpellPoints, bool& bShouldEnableSpellPointsButton, bool& bShouldEnableEquipButton)
