@@ -60,12 +60,9 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 	//Setup by caller the damage using gameplaytag
 	const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();
 
-	//Now we should get the damage from the tmap
-	for (auto& Pair : DamageTypes)
-	{
-		const float ScaledDamage = Pair.Value.GetValueAtLevel(GetAbilityLevel());
-		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,Pair.Key,ScaledDamage);
-	}
+	//Now we should get the damage
+	const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,DamageType,ScaledDamage);
 		
 	Projectile->DamageEffectSpecHandle = SpecHandle;
 		
