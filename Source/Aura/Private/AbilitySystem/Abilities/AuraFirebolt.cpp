@@ -3,6 +3,10 @@
 
 #include "AbilitySystem/Abilities/AuraFirebolt.h"
 
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
+#include "Interaction/CombatInterface.h"
+#include "Actor/AuraProjectile.h"
+
 FString UAuraFirebolt::GetDescription(int32 Level)
 {
 	const int32 ScaledDamage = Damage.GetValueAtLevel(Level);
@@ -45,4 +49,39 @@ FString UAuraFirebolt::GetNextLevelDescription(int32 Level)
 			"<Default>Launches </><Level>%d</><Default> a bolt of fire, "
 			"exploding on impact and dealing: </><Damage>%d</>"
 			"<Default> fire damage with a chance to burn.</>"), Level,ManaCost, Cooldown, FMath::Min(Level, NumProjectiles),ScaledDamage);
+}
+
+void UAuraFirebolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag, bool bOverridePitch, float PitchOverride, AActor* HomingTarget)
+{
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
+	if (!bIsServer) return;
+	
+	const FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(
+		GetAvatarActorFromActorInfo(),
+		SocketTag);
+	FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
+
+	if (bOverridePitch) Rotation.Pitch = PitchOverride;
+
+	const FVector Forward = Rotation.Vector();
+	
+	TArray<FRotator> Rotations =  UAuraAbilitySystemLibrary::EvenlyRotatedRotators(Forward, FVector::UpVector, ProjectileSpread, NumProjectiles);
+
+	for(const FRotator& Rot : Rotations)
+	{
+		FTransform SpawnTransform;
+		SpawnTransform.SetLocation(SocketLocation);
+		SpawnTransform.SetRotation(Rot.Quaternion());
+
+		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
+		ProjectileClass,
+		SpawnTransform,
+		GetOwningActorFromActorInfo(),
+		Cast<APawn>(GetOwningActorFromActorInfo()),
+		ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+
+		Projectile->DamageEffectParams = MakeDamageEffectParamsFromClassDefaults();
+	
+		Projectile->FinishSpawning(SpawnTransform);
+	}
 }
