@@ -31,7 +31,7 @@ public:
 	/* Combat Interface*/
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 
-	virtual void Die() override;
+	virtual void Die(const FVector& DeathImpulse) override;
 
 	virtual bool IsDead_Implementation() const override;
 
@@ -62,7 +62,7 @@ public:
 	/* end Combat Interface*/
 	
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandelDeath();
+	virtual void MulticastHandelDeath(const FVector& DeathImpulse);
 
 	//to make the relation between the montage and the tag
 	UPROPERTY(EditAnywhere, Category = "Combat")

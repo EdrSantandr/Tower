@@ -150,12 +150,11 @@ void UAuraAttributeSet::HandleIncomingDamage(FEffectProperties Props)
 
 		if(bFatal)
 		{
-			//Todo: use death impulse
-			
 			ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor);
 			if(CombatInterface)
 			{
-				CombatInterface->Die();
+				FVector Impulse = UAuraAbilitySystemLibrary::GetDeathImpulse(Props.EffectContextHandle);
+				CombatInterface->Die(UAuraAbilitySystemLibrary::GetDeathImpulse(Props.EffectContextHandle));
 			}
 			//Send the event to reward XP
 			SendXPEvent(Props);
