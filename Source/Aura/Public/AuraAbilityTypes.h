@@ -80,6 +80,7 @@ public:
 	TSharedPtr<FGameplayTag> GetDamageType() const { return DamageType; }
 	FVector GetDeathImpulse() const { return DeathImpulse; }
 	FVector GetKnockbackForce() const { return KnockbackForce; }
+	float GetKnockbackChance() const { return KnockbackChance; }
 	
 	void SetIsCriticalHit (bool bInIsCriticalHit) { bIsCriticalHit = bInIsCriticalHit; }
 	void SetIsBlockedHit (bool bInIsBlockedHit) { bIsBlockedHit = bInIsBlockedHit; }
@@ -90,6 +91,7 @@ public:
 	void SetDamageType(TSharedPtr<FGameplayTag> InDamageType){ DamageType = InDamageType;}
 	void SetDeathImpulse(const FVector& InDeathImpulse) { DeathImpulse = InDeathImpulse; }
 	void SetKnockbackForce(const FVector& InKnockbackForce) { KnockbackForce = InKnockbackForce; }
+	void SetKnockbackChance(float InKnockbackChance) { KnockbackChance= InKnockbackChance; }
 	
 	virtual UScriptStruct* GetScriptStruct() const override { return StaticStruct(); }
 
@@ -127,6 +129,9 @@ protected:
 
 	UPROPERTY()
 	float DebuffFrequency = 0.f;
+
+	UPROPERTY()
+	float KnockbackChance = 0.f;
 
 	TSharedPtr<FGameplayTag> DamageType;
 

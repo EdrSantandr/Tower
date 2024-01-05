@@ -167,13 +167,14 @@ void UAuraAttributeSet::HandleIncomingDamage(FEffectProperties Props)
 			Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 
 			// Handle knockbackforce
-			const FVector& KnockbackForce = UAuraAbilitySystemLibrary::GetKnobackForce(Props.EffectContextHandle); 
-			if(!KnockbackForce.IsNearlyZero(1.f))
+			const FVector& KnockbackForce = UAuraAbilitySystemLibrary::GetKnobackForce(Props.EffectContextHandle);
+			// Added knockback chance validation
+			const float KnockbackChance = UAuraAbilitySystemLibrary::GetKnockbackChance(Props.EffectContextHandle);
+			const bool bKnockback = FMath::RandRange(1,100) < KnockbackChance;
+			if(!KnockbackForce.IsNearlyZero(1.f) && bKnockback)
 			{
 				Props.TargetCharacter->LaunchCharacter(KnockbackForce, true, true);
-				
 			}
-			
 		}
 		//Here we know if there is a BlockedHit or CriticalHit
 		const bool bBlockedHit = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
@@ -253,7 +254,7 @@ void UAuraAttributeSet::HandleIncomingXP(FEffectProperties Props)
 		const int32 CurrentXP = IPlayerInterface::Execute_GetXP(Props.SourceCharacter);
 
 		const int32 NewLevel = IPlayerInterface::Execute_FindLevelForXP(Props.SourceCharacter, CurrentXP + LocalIncomingXP);
-		UE_LOG(LogAura, Log, TEXT("NewLevel: %i"), NewLevel);
+		//UE_LOG(LogAura, Log, TEXT("NewLevel: %i"), NewLevel);
 		const int32 NumberOfLevelUps = NewLevel - CurrentLevel;
 		if (NumberOfLevelUps > 0)
 		{

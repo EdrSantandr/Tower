@@ -77,6 +77,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "AuraAblitySystemLibrary|GameplayEffects")
 	static FVector GetKnobackForce(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintPure, Category = "AuraAblitySystemLibrary|GameplayEffects")
+	static float GetKnockbackChance(const FGameplayEffectContextHandle& EffectContextHandle);
 	
 	// The UPARAM allow us to setup the no const EffectContextHandle reference as a parameter
 	UFUNCTION(BlueprintCallable, Category = "AuraAblitySystemLibrary|GameplayEffects")
@@ -105,6 +108,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AuraAblitySystemLibrary|GameplayEffects")
 	static void SetKnockbackForce(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FVector& InKnockbackForce);
+
+	UFUNCTION(BlueprintCallable, Category = "AuraAblitySystemLibrary|GameplayEffects")
+	static void SetKnockbackChance(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, float InKnockbackChance);
 	
 	UFUNCTION(BlueprintCallable, Category = "AuraAblitySystemLibrary|GameplayMechanics")
 	static void GetLifePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius, const FVector SphereOrigin);

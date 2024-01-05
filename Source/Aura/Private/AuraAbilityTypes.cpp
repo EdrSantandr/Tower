@@ -73,9 +73,13 @@ bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bo
 		{
 			RepBits |= 1 << 15;
 		}
+		if( KnockbackChance > 0.f)
+		{
+			RepBits |= 1 << 16;
+		}
 	}
 
-	Ar.SerializeBits(&RepBits, 15);
+	Ar.SerializeBits(&RepBits, 16);
 
 	if (RepBits & (1 << 0))
 	{
@@ -143,7 +147,7 @@ bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bo
 	}
 	if (RepBits & (1 << 12))
 	{
-		Ar << DebuffFrequency;		
+		Ar << DebuffFrequency;
 	}
 	if (RepBits & (1 << 13))
 	{
@@ -163,6 +167,10 @@ bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bo
 	if (RepBits & (1 << 15))
 	{
 		KnockbackForce.NetSerialize(Ar, Map, bOutSuccess);
+	}
+	if (RepBits & (1 << 16))
+	{
+		Ar << KnockbackChance;
 	}
 	
 	if (Ar.IsLoading())
