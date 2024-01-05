@@ -55,6 +55,8 @@ void AAuraCharacter::InitAbilityActorInfo()
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
 
+	OnAscRegistered.Broadcast(AbilitySystemComponent);
+	
 	// Here we use an if because in multiplayer, in the server all characters have player controllers,
 	// but in the clients not all characters have playercontroller 
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
