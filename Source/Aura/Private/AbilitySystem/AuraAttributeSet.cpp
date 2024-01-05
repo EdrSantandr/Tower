@@ -165,6 +165,15 @@ void UAuraAttributeSet::HandleIncomingDamage(FEffectProperties Props)
 			FGameplayTagContainer TagContainer;
 			TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
 			Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+
+			// Handle knockbackforce
+			const FVector& KnockbackForce = UAuraAbilitySystemLibrary::GetKnobackForce(Props.EffectContextHandle); 
+			if(!KnockbackForce.IsNearlyZero(1.f))
+			{
+				Props.TargetCharacter->LaunchCharacter(KnockbackForce, true, true);
+				
+			}
+			
 		}
 		//Here we know if there is a BlockedHit or CriticalHit
 		const bool bBlockedHit = UAuraAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
