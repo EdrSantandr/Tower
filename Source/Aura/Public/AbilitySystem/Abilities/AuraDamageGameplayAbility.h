@@ -44,20 +44,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Debuff")
 	FScalableFloat DebuffDuration;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	float DeathImpulseMagnitude = 60.f;
 	
-	/* Just if we cant handle with Curve Tables
-	UPROPERTY(EditDefaultsOnly, Category = "Debuff")
-	float DebuffChance = 20.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Debuff")
-	float DebuffDamage = 5.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Debuff")
-	float DebuffFrequency = 1.f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Debuff")
-	float DebuffDuration = 5.f;
-	*/
 	UFUNCTION(BlueprintPure)
 	FTaggedMontage GetRandomTaggedMontageFromArray(const TArray<FTaggedMontage>& TaggedMontages) const;
 };
