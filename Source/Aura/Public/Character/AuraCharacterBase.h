@@ -58,6 +58,8 @@ public:
 	FOnASCRegistered OnAscRegistered;
 
 	FOnDeath OnDeath;
+
+	virtual USkeletalMeshComponent* GetWeapon_Implementation() override;
 	
 	/* end Combat Interface*/
 	
