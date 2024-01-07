@@ -119,6 +119,12 @@ public:
 	
 	//For Gameplay Effects
 	FGameplayTag Effects_HitReact;
+
+	//For player input actions blocking
+	FGameplayTag Player_Block_InputPressed;
+	FGameplayTag Player_Block_InputHeld;
+	FGameplayTag Player_Block_InputReleased;
+	FGameplayTag Player_Block_CursorTrace;
 	
 private:
     static FAuraGameplayTags GameplayTags;
