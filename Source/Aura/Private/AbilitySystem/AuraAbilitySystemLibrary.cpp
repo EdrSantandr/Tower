@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AuraAbilityTypes.h"
 #include "AuraGameplayTags.h"
+#include "Aura/AuraLogChannels.h"
 #include "Game/AuraGameModeBase.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -329,6 +330,35 @@ void UAuraAbilitySystemLibrary::GetLifePlayersWithinRadius(const UObject* WorldC
 				OutOverlappingActors.AddUnique(Overlap.GetActor());
 			}
 		}
+	}
+}
+
+void UAuraAbilitySystemLibrary::GetClosestTargets(int32 MaxTargets, const TArray<AActor*>& Actors, TArray<AActor*>& OutClosetsTargets, const FVector& Origin)
+{
+	if(Actors.Num() <= MaxTargets)
+	{
+		OutClosetsTargets = Actors;
+		return;
+	}
+	TArray<AActor* > ActorsToCheck = Actors;
+	int32 NumTargetsFound = 0;
+	while(NumTargetsFound < MaxTargets)
+	{
+		if(ActorsToCheck.Num() == 0) break;
+		double ClosestDistance = TNumericLimits<double>::Max();
+		AActor* ClosestActor;
+		for(AActor* PotentialTarget : ActorsToCheck)
+		{
+			const double Distance = (PotentialTarget->GetActorLocation() - Origin).Length();
+			if(Distance < ClosestDistance)
+			{
+				ClosestDistance = Distance;
+				ClosestActor = PotentialTarget;
+			}
+		}
+		ActorsToCheck.Remove(ClosestActor);
+		OutClosetsTargets.AddUnique(ClosestActor);
+		++NumTargetsFound;
 	}
 }
 

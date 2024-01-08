@@ -115,6 +115,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AuraAblitySystemLibrary|GameplayMechanics")
 	static void GetLifePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius, const FVector SphereOrigin);
 
+	UFUNCTION(BlueprintCallable, Category = "AuraAblitySystemLibrary|GameplayMechanics")
+	static void GetClosestTargets(int32 MaxTargets, const TArray<AActor*>& Actors, TArray<AActor*>& OutClosetsTargets, const FVector& Origin);
+	
 	UFUNCTION(BlueprintPure, Category = "AuraAblitySystemLibrary|GameplayMechanics")
 	static bool IsNotFriend(AActor* FirstActor, AActor* SecondActor);
 
@@ -129,4 +132,5 @@ public:
 	
 	UFUNCTION()
 	static int32 GetXPRewardForClassAndLevel(const UObject* WorldContextObject, ECharacterClass CharacterClass, int32 CharacterLevel);
+	
 };

@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/Abilities/AuraBeamSpell.h"
 
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
+#include "Aura/AuraLogChannels.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -54,4 +56,51 @@ void UAuraBeamSpell::TraceFirstTarget(const FVector& BeamTargetLocation)
 		
 	}
 	
+}
+
+void UAuraBeamSpell::StoreAdditionalTargets(TArray<AActor*>& OutAdditionalTargets)
+{
+	TArray<AActor* > ActorsToIgnore;
+	ActorsToIgnore.Add(GetAvatarActorFromActorInfo());
+	ActorsToIgnore.Add(MouseHitActor);
+	TArray<AActor* > OverlappingActors;
+	FVector OriginLocation = MouseHitActor->GetActorLocation();
+	int32 NumAdditionalTargets = 5;
+	
+	UAuraAbilitySystemLibrary::GetLifePlayersWithinRadius(GetAvatarActorFromActorInfo(),
+		OverlappingActors,
+		ActorsToIgnore,
+		BeamMaxRadiusRange,
+		MouseHitActor->GetActorLocation());
+	
+	if (OverlappingActors.Num()<= NumAdditionalTargets)
+	{
+		OutAdditionalTargets = OverlappingActors;
+	}
+	else
+	{
+		int32 Index = 0;
+		Algo::Sort(OverlappingActors, FSortByDistance(OriginLocation));
+		while(Index< NumAdditionalTargets)
+		{
+			OutAdditionalTargets.Add(OverlappingActors[Index]);
+			Index++;
+		}
+	}
+	
+	/*
+	TArray<AActor* > OverlappingActorsToSort = OverlappingActors;
+	FVector OriginLocation = MouseHitActor->GetActorLocation();
+	int32 NumAdditionalTargets = 5;
+	UAuraAbilitySystemLibrary::GetClosestTargets(NumAdditionalTargets, OverlappingActors, OutAdditionalTargets, MouseHitActor->GetActorLocation());
+	*/
+	//sORT the array
+	
+	/* Just to Test values
+	for (AActor* ActorSorted : OutAdditionalTargets)
+	{
+		float Distance = (ActorSorted->GetActorLocation() - OriginLocation).Length();
+		UE_LOG(LogAura, Warning, TEXT("NAME: [%s] distance [%f]"), *ActorSorted->GetName(), Distance);
+	}
+	*/
 }

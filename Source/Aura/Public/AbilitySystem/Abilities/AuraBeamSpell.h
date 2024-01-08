@@ -9,6 +9,25 @@
 /**
  * 
  */
+struct FSortByDistance
+{
+	explicit FSortByDistance(const FVector& InSourceLocation)
+		: SourceLocation(InSourceLocation)
+	{
+	}
+
+	/* The Location to use in our Sort comparison. */
+	FVector SourceLocation = FVector::Zero();
+
+	bool operator()(const AActor* A, const AActor* B) const
+	{
+		float DistanceA = FVector::DistSquared(SourceLocation, A->GetActorLocation());
+		float DistanceB = FVector::DistSquared(SourceLocation, B->GetActorLocation());
+
+		return DistanceA < DistanceB;
+	}
+};
+
 UCLASS()
 class AURA_API UAuraBeamSpell : public UAuraDamageGameplayAbility
 {
@@ -24,6 +43,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void TraceFirstTarget(const FVector& BeamTargetLocation);
+
+	UFUNCTION(BlueprintCallable)
+	void StoreAdditionalTargets(TArray<AActor*>& OutAdditionalTargets);
+
+	UPROPERTY(EditDefaultsOnly, Category="Beam")
+	float BeamMaxRadiusRange = 850.f;
 	
 protected:
 
@@ -38,4 +63,7 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, Category="Beam")
 	TObjectPtr<ACharacter> OwnerCharacter;
+
+	UPROPERTY(EditDefaultsOnly, Category="Beam")
+	int32 MaxNumShockTargets = 5;
 };
