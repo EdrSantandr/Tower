@@ -53,9 +53,7 @@ void UAuraBeamSpell::TraceFirstTarget(const FVector& BeamTargetLocation)
 				MouseHitActor = HitResult.GetActor();
 			}
 		}
-		
 	}
-	
 }
 
 void UAuraBeamSpell::StoreAdditionalTargets(TArray<AActor*>& OutAdditionalTargets)
