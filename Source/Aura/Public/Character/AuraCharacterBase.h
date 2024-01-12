@@ -53,11 +53,11 @@ public:
 
 	virtual FOnASCRegistered GetOnASCRegisteredSignature() override;
 
-	virtual FOnDeath GetOnDeathDelegate() override;
+	virtual FOnDeathSignature& GetOnDeathDelegate() override;
 	
 	FOnASCRegistered OnAscRegistered;
 
-	FOnDeath OnDeath;
+	FOnDeathSignature OnDeathDelegate;
 
 	virtual USkeletalMeshComponent* GetWeapon_Implementation() override;
 	

@@ -73,10 +73,10 @@ void AAuraCharacterBase::MulticastHandelDeath_Implementation(const FVector& Deat
 
 	bDead = true;
 
-	OnDeath.Broadcast(this);
-
 	//Finish the Debuff component
 	BurnDebuffComponent->Deactivate();
+
+	OnDeathDelegate.Broadcast(this);
 }
 
 void AAuraCharacterBase::BeginPlay()
@@ -148,10 +148,11 @@ FOnASCRegistered AAuraCharacterBase::GetOnASCRegisteredSignature()
 	return OnAscRegistered;
 }
 
-FOnDeath AAuraCharacterBase::GetOnDeathDelegate()
+FOnDeathSignature& AAuraCharacterBase::GetOnDeathDelegate()
 {
-	return OnDeath;
+	return OnDeathDelegate;
 }
+
 
 USkeletalMeshComponent* AAuraCharacterBase::GetWeapon_Implementation()
 {
