@@ -14,6 +14,9 @@ DECLARE_DELEGATE_OneParam(FForEachAbility, const FGameplayAbilitySpec&);
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FAbilityStatusChanged, const FGameplayTag& /*AbilityTag*/, const FGameplayTag& /*StatusAbilityTag*/, int32 /*AbilityLevel*/ );
 //Make a delegate to send te info required to update the globes after an ability equipment
 DECLARE_MULTICAST_DELEGATE_FourParams(FAbilityEquipped, const FGameplayTag& /*AbilityTag*/,const FGameplayTag& /*StatusTag*/,const FGameplayTag& /*SlotTag*/, const FGameplayTag& /*PrevSlotTag*/);
+//Make a delegate for activate and deactivate passive abilities
+DECLARE_MULTICAST_DELEGATE_OneParam(FDeactivatePassiveAbility, const FGameplayTag&/*AbilityTag*/);
+
 /**
  * 
  */
@@ -32,6 +35,8 @@ public:
 	FAbilityStatusChanged AbilityStatusChangedDelegate;
 
 	FAbilityEquipped AbilityEquippedDelegate;
+	
+	FDeactivatePassiveAbility DeactivatePassiveAbilityDelegate;
 
 	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>> &StartupAbilities);
 
